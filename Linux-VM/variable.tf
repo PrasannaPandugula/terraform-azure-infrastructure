@@ -1,0 +1,8 @@
+variable "vn_name" {}
+variable "vn_address" {}
+variable "subnet-name" {}
+variable "subnet_address" {}
+variable "nsg-name" {}
+variable "vm_name" {}
+variable "nic_name" {}
+variable "env" {}
