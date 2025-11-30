@@ -23,7 +23,7 @@ resource "azurerm_virtual_network" "vn-linux" {
 resource "azurerm_subnet" "subnet1" {
   name                 = var.subnet-name
   resource_group_name  = azurerm_resource_group.azrs.location
-  virtual_network_name = azurerm_resource_group.vn.name
+  virtual_network_name = azurerm_virtual_network.vn-linux.name
   address_prefixes     = [var.subnet_address]
 }
 #network security
