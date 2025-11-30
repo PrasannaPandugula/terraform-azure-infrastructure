@@ -3,16 +3,17 @@ name: Infrastructure configuration using Terraform on Azure
 on:
   workflow_dispatch: 
     inputs: 
-      description: "Terraform Execution"
-      required: true
-      default: "plan"
-      type: choice
-      options: 
-        - plan
-        - apply
-        - destroy 
+      actions:
+        description: "Terraform Execution"
+        required: true
+        default: "plan"
+        type: choice
+        options: 
+          - plan
+          - apply
+          - destroy 
 jobs:
-  infrastructure using terraform:
+  infrastructure_using_terraform:
     name: Terraform ${{ github.event.inputs.actions }}
     runs-on: ubuntu-latest
     env: 
@@ -25,7 +26,7 @@ jobs:
     defaults: 
       run: 
         shell: bash
-        workflow_direcctory: Linux-VM
+        working-directory: Linux-VM
 
     steps:
     - name: Checkout repo
@@ -51,22 +52,22 @@ jobs:
       run: terraform init 
 
     - name: Terarform format Check
-      run: terrafrom fmt -recursive
+      run: terraform fmt -recursive
 
     - name: Terraform validate 
-      run: terrafrom validate
+      run: terraform validate
     
-    - name: Terraform Plan  
+    - name: Terraform Plan 
       if: ${{ github.event.inputs.actions == 'plan'}}
       run: terraform plan -input=false 
 
     - name: Tearrafrom apply 
       if: ${{ github.event.inputs.actions == 'apply'}}
-      run: terrafrom apply -auto-approve 
+      run: terraform apply -auto-approve 
 
-    - name: Terrafrom destroy 
+    - name: Terraform destroy 
       if: ${{ github.event.inputs.actions == 'destroy'}}
-      run: terrafrom destroy 
+      run: terraform destroy 
 
 
     
