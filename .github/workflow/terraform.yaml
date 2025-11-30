@@ -1,0 +1,72 @@
+name: Infrastructure configuration using Terraform on Azure
+
+on:
+  workflow_dispatch: 
+    inputs: 
+      description: "Terraform Execution"
+      required: true
+      default: "plan"
+      type: choice
+      options: 
+        - plan
+        - apply
+        - destroy 
+jobs:
+  infrastructure using terraform:
+    name: Terraform ${{ github.event.inputs.actions }}
+    runs-on: ubuntu-latest
+    env: 
+      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }} 
+      TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
+    permissions:
+      contents: read
+    environment: production
+    
+    defaults: 
+      run: 
+        shell: bash
+        workflow_direcctory: Linux-VM
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v5
+    
+    # folder creation on terraform runner to store terraform credentials
+    - name: Setup Terraform cloud credentials
+      run: |
+        mkdir -p ~/.terraform.d
+        echo '{"credentials": {"app.terraform.io": {"token": "'"${{ secrets.TF_API_TOKEN }}"'"}}}' > ~/.terraform.d/credentials.tfrc.json
+
+    - name: setup terraform
+      uses: hashicorp/setup-terraform@v3
+      with: 
+        path: |
+          ~/.terraform.d/plugin-cache
+          .terraform
+        keys: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
+        restore-keys: |
+          ${{ runner.os }}-terraform- 
+
+    - name: Initialising the terraform
+      run: terraform init 
+
+    - name: Terarform format Check
+      run: terrafrom fmt -recursive
+
+    - name: Terraform validate 
+      run: terrafrom validate
+    
+    - name: Terraform Plan 
+      if: ${{ github.event.inputs.actions == 'plan'}}
+      run: terraform plan -input=false 
+
+    - name: Tearrafrom apply 
+      if: ${{ github.event.inputs.actions == 'apply'}}
+      run: terrafrom apply -auto-approve 
+
+    - name: Terrafrom destroy 
+      if: ${{ github.event.inputs.actions == 'destroy'}}
+      run: terrafrom destroy 
+
+
+    
