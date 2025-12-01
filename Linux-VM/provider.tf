@@ -5,6 +5,12 @@ terraform {
       version = "4.54.0"
     }
   }
+  cloud {
+    organization = "prasanna-projects"       
+    workspaces {
+      name = "terrafrom-azure" 
+  }
+}
 }
 
 provider "azurerm" {
