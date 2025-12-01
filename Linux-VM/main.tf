@@ -21,14 +21,14 @@ resource "azurerm_virtual_network" "vn-linux" {
 }
 
 resource "azurerm_subnet" "subnet1" {
-  name                 = var.subnet-name
+  name                 = var.subnet_name
   resource_group_name  = azurerm_resource_group.azrs.location
   virtual_network_name = azurerm_virtual_network.vn-linux.name
   address_prefixes     = [var.subnet_address]
 }
 #network security
 resource "azurerm_network_security_group" "network-sg" {
-  name                = var.nsg-name
+  name                = var.nsg_name
   location            = azurerm_resource_group.azrs.location
   resource_group_name = azurerm_resource_group.azrs.name
 
