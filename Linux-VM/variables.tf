@@ -6,3 +6,4 @@ variable "nsg-name" {}
 variable "vm_name" {}
 variable "nic_name" {}
 variable "env" {}
+variable "azure-region" {}
