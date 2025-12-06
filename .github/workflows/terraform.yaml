@@ -16,9 +16,9 @@ jobs:
   infrastructure_using_terraform:
     name: Terraform ${{ github.event.inputs.actions }}
     runs-on: ubuntu-latest
-    env: 
-      TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }} 
-      TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
+    #env: 
+      #TF_WORKSPACE: ${{ secrets.TF_WORKSPACE }} 
+      #TF_CLOUD_ORGANIZATION: ${{ secrets.TF_CLOUD_ORGANIZATION }}
     permissions:
       contents: read
     environment: production
@@ -48,7 +48,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-terraform- 
 
-    - name: Initialising the terraform
+    - name: Initializing the terraform
       run: terraform init 
 
     - name: Terarform format Check
